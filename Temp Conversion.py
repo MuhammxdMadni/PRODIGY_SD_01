@@ -1,44 +1,49 @@
-def convert_temperature(temp, from_unit):
+import tkinter as tk
+from tkinter import ttk, messagebox
 
-    """Convert temperature between Celsius, Fahrenheit, and Kelvin"""
-    if from_unit.upper() == 'C':
-        celsius = temp
-    elif from_unit.upper() == 'F':
-        celsius = (temp - 32) * 5/9
-    elif from_unit.upper() == 'K':
-        celsius = temp - 273.15
-    else:
-        raise ValueError("Unit must be 'C', 'F', or 'K'")
-    
-    fahrenheit = (celsius * 9/5) + 32
-    kelvin = celsius + 273.15
-    
-    return {
-        'celsius': round(celsius, 2),
-        'fahrenheit': round(fahrenheit, 2),
-        'kelvin': round(kelvin, 2)
-    }
-
-def main():
-
-    """Main function to run the temperature converter"""
-    print("=== Temperature Converter ===")
-    
+def convert_temperature():
     try:
-        temp = float(input("Enter temperature: "))
-        unit = input("Enter unit (C/F/K): ").strip()
-        
-        result = convert_temperature(temp, unit)
-        
-        print(f"\nResults for {temp}°{unit.upper()}:")
-        print(f"Celsius:    {result['celsius']}°C")
-        print(f"Fahrenheit: {result['fahrenheit']}°F")
-        print(f"Kelvin:     {result['kelvin']}K")
-        
-    except ValueError as e:
-        print(f"Error: {e}")
-    except Exception as e:
-        print(f"Unexpected error: {e}")
+        temp = float(entry_temp.get())
+        from_unit = combo_unit.get()
+        if from_unit == "Celsius":
+            celsius = temp
+        elif from_unit == "Fahrenheit":
+            celsius = (temp - 32) * 5/9
+        elif from_unit == "Kelvin":
+            celsius = temp - 273.15
+        else:
+            raise ValueError
 
-if __name__ == "__main__":
-    main()
+        fahrenheit = (celsius * 9/5) + 32
+        kelvin = celsius + 273.15
+
+        label_result.config(
+            text=f"Celsius:    {celsius:.2f}°C\n"
+                 f"Fahrenheit: {fahrenheit:.2f}°F\n"
+                 f"Kelvin:     {kelvin:.2f}K"
+        )
+    except ValueError:
+        messagebox.showerror("Invalid input", "Please enter a valid number and select a unit.")
+
+root = tk.Tk()
+root.title("Temperature Converter")
+root.geometry("320x220")
+
+frame = ttk.Frame(root, padding=15)
+frame.pack(fill=tk.BOTH, expand=True)
+
+ttk.Label(frame, text="Enter Temperature:").pack(anchor=tk.W)
+entry_temp = ttk.Entry(frame)
+entry_temp.pack(fill=tk.X, pady=5)
+
+ttk.Label(frame, text="Select Unit:").pack(anchor=tk.W)
+combo_unit = ttk.Combobox(frame, values=["Celsius", "Fahrenheit", "Kelvin"], state="readonly")
+combo_unit.current(0)
+combo_unit.pack(fill=tk.X, pady=5)
+
+ttk.Button(frame, text="Convert", command=convert_temperature).pack(pady=10)
+
+label_result = ttk.Label(frame, text="", font=("Arial", 11))
+label_result.pack(pady=10)
+
+root.mainloop()
