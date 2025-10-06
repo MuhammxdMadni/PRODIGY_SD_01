@@ -1,0 +1,1 @@
+A Python program that converts temperature between Celsius, Fahrenheit and Kelvin scales. A GUI as output will appear on the screen and the user set the values and its original unit as input and press convert button in the GUI screen, then it will be converted into the two other units and display it to the user.
